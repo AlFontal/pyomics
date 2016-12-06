@@ -22,17 +22,20 @@ def get_arguments():
     """
     parser = argparse.ArgumentParser(description="Pipeline script for DE \
                                                     analysis")
-    parser.add_argument("-SEr", nargs="*", "--se_reads", help=".fastq file \
+    parser.add_argument("-SEr", "--se_reads", nargs="*", help=".fastq file \
     containing single end RNA seq reads", type=str, required=False)
-    parser.add_argument("-PEr", nargs="*", "--pe_reads", help=".fastq file \
+    parser.add_argument("-PEr", "--pe_reads", nargs="*", help=".fastq file \
     containing paired end RNA seq reads", type=str, required=False)
     parser.add_argument("-clip", "--illumina_clip", help="file containing \
     the sequences that need to be trimmed off the target sequence", 
     type=str, required=False)
+    arguments = parser.parse_args()
+    return arguments
 
 
-def run_trimmomatic(fastq_filename, clipper_file, lead_val=3, 
-                    tail_val=3, win_size=4, req_qual=30):
+def run_trimmomatic(fastq_filename, clipper_file, seed_mm=2, palin_th=30,
+                    simple_th=10, lead_val=3, tail_val=3, win_size=4, 
+                    req_qual=30, single=True):
     """ Returns the trimmed reads of single or paired end data to a file
     
     Keyword arguments:
@@ -40,13 +43,22 @@ def run_trimmomatic(fastq_filename, clipper_file, lead_val=3,
         trimm_outfile -- string, filename for the outputfile
         clipper_file -- string, filename with adaptersequences that need to 
         be trimmed of the raw fastq reads
+        seed_mm -- integer, seedMismatches: specifies maximum mismatch count
+        palin_th -- integer, palindromeClipThreshold: specifies how accurate
+        the match between two adapter ligated reads must be.
+        simple_th -- integer, simpleClipThreshold: specifies how accurate the 
+        match between any adapter must be against a read
         LEADING -- integer, specifies minimum quality required to keep a base.
         TRAILING -- integer, specifies minimum quality required to keep a base.
-        win_size -- integer, specifies the number of bases to average across
-        req_qual -- integer, specifies the average quality required
+        win_size -- integer, windowSize:specifies the number of bases to 
+        average across
+        req_qual -- integer, requiredQuality: specifies the average quality 
+        required
+        single -- boolean, 
     Returns:
         trimm_outfile -- .fastq, name of trimmed RNA-seq reads in .fastq format
     """
+    # make for loop to go through every dataset
     
     trimm_outfile = "trimmed_%s.fastq"%(fastq_filename)
     # checks whether the file already exists, if not it runs the tool
@@ -54,25 +66,40 @@ def run_trimmomatic(fastq_filename, clipper_file, lead_val=3,
         print "The file already exists"
         return trimm_outfile
     else:
-        cmdSE = "TrimmomaticSE %s %s ILLUMINACLIP:%s LEADING:%d TRAILING:%d \
-                        SLIDINGWINDOW:%d:%d"
-                %(fastq_filename, trimm_outfile, clipper_file, lead_val, 
-                  trail_val, win_size, req_qual)
-        cmdPE = "TrimmomaticPE %s %s ILLUMINACLIP:%s LEADING:%d TRAILING:%d \
-                        SLIDINGWINDOW:%d:%d"
-                %(fastq_filename, trimm_outfile, clipper_file, lead_val, 
-                  trail_val, win_size, req_qual)
-      
-    output_check = subprocess.check_output(cmd, shell=True)
-    call_check = subprocess.check_call(cmd, shell = True)
+        if single == True:
+            cmdSE = "TrimmomaticSE %s %s ILLUMINACLIP:%s:%d:%d:%d LEADING:%d \
+            TRAILING:%d SLIDINGWINDOW:%d:%d" %(fastq_filename, trimm_outfile, 
+                                               clipper_file, seed_mm, palin_th, 
+                                               simple_th, lead_val, tail_val, 
+                                               win_size, req_qual)
+        if single == False:
+            cmdPE = "TrimmomaticPE%s %s ILLUMINACLIP:%s:%d:%d:%d LEADING:%d \
+            TRAILING:%d SLIDINGWINDOW:%d:%d" %(fastq_filename, trimm_outfile, 
+                                               clipper_file, seed_mm, palin_th, 
+                                               simple_th, lead_val, tail_val, 
+                                               win_size, req_qual)
+                               
+    output_check = subprocess.check_output(cmdSE, shell=True)
+    call_check = subprocess.check_call(cmdSE, shell = True)
     return call_check #must be 0
       
-
+    output_check = subprocess.check_output(cmdPE, shell=True)
+    call_check = subprocess.check_call(cmdPE, shell = True)
+    return call_check #must be 0
 
     
 
 if __name__ == "__main__":
     #Get input file names from command line
     arguments = get_arguments() 
+    print arguments
+    
+    if arguments.se_reads==True:
+        run_trimmomatic(arguments.se_reads[0], arguments.illumina_clip,
+                        single=True)
+    if arguments.pe_reads==True:
+        run_trimmomatic(arguments.pe_reads, arguments.illumina_clip, 
+                        single=False)
+        
     # run trimmomatic tool from command line
-    run_trimmomatic(arguments.se_reads, arguments.illumina_clip)
+    run_trimmomatic(arguments.se_reads[0], arguments.illumina_clip)
