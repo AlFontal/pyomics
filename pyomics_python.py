@@ -22,39 +22,46 @@ def get_arguments():
     """
     parser = argparse.ArgumentParser(description="Pipeline script for DE \
                                                     analysis")
-    parser.add_argument("-SEreads", "--single end reads", help=".fastq file \
+    parser.add_argument("-SEr", nargs="*", "--se_reads", help=".fastq file \
     containing single end RNA seq reads", type=str, required=False)
-    parser.add_argument("-PEreads", "--paired end reads", help=".fastq file \
+    parser.add_argument("-PEr", nargs="*", "--pe_reads", help=".fastq file \
     containing paired end RNA seq reads", type=str, required=False)
-    parser.add_argument("-clip", "--ILLUMINACLIP", help="file which contains \
-    the sequences that need to be trimmed", type=str, required=False)
+    parser.add_argument("-clip", "--illumina_clip", help="file containing \
+    the sequences that need to be trimmed off the target sequence", 
+    type=str, required=False)
 
 
-def run_trimmomatic(fastq_filename, out_filename, clipper_file, LEADING=3, 
-                    TRAILING=3, win_size=4, req_qual=30):
-    """ Returns the output of the annotation tool 'augustus' to a file
+def run_trimmomatic(fastq_filename, clipper_file, lead_val=3, 
+                    tail_val=3, win_size=4, req_qual=30):
+    """ Returns the trimmed reads of single or paired end data to a file
     
     Keyword arguments:
-        fastq_filename -- file in fastq format (.fastq) 
-        out_filename -- string, filename for the outputfile
+        fastq_filename -- file with  RNA-seq reads in fastq format (.fastq) 
+        trimm_outfile -- string, filename for the outputfile
         clipper_file -- string, filename with adaptersequences that need to 
         be trimmed of the raw fastq reads
         LEADING -- integer, specifies minimum quality required to keep a base.
         TRAILING -- integer, specifies minimum quality required to keep a base.
         win_size -- integer, specifies the number of bases to average across
         req_qual -- integer, specifies the average quality required
-        SLIDINGWINDOW -- <
     Returns:
-        out_filename -- .fastq, name of output file in .fastq format
+        trimm_outfile -- .fastq, name of trimmed RNA-seq reads in .fastq format
     """
     
+    trimm_outfile = "trimmed_%s.fastq"%(fastq_filename)
     # checks whether the file already exists, if not it runs the tool
-    if os.path.exists(fileout_augustus):
+    if os.path.exists(trimm_outfile):
         print "The file already exists"
-        return fileout_augustus
+        return trimm_outfile
     else:
-        cmd = "augustus --genemodel=%s --species=%s %s > %s"\
-               %(genemodel_option, SPECIES, input_fasta, fileout_augustus)
+        cmdSE = "TrimmomaticSE %s %s ILLUMINACLIP:%s LEADING:%d TRAILING:%d \
+                        SLIDINGWINDOW:%d:%d"
+                %(fastq_filename, trimm_outfile, clipper_file, lead_val, 
+                  trail_val, win_size, req_qual)
+        cmdPE = "TrimmomaticPE %s %s ILLUMINACLIP:%s LEADING:%d TRAILING:%d \
+                        SLIDINGWINDOW:%d:%d"
+                %(fastq_filename, trimm_outfile, clipper_file, lead_val, 
+                  trail_val, win_size, req_qual)
       
     output_check = subprocess.check_output(cmd, shell=True)
     call_check = subprocess.check_call(cmd, shell = True)
@@ -66,7 +73,6 @@ def run_trimmomatic(fastq_filename, out_filename, clipper_file, LEADING=3,
 
 if __name__ == "__main__":
     #Get input file names from command line
-    get_arguments() 
+    arguments = get_arguments() 
     # run trimmomatic tool from command line
-    run_augustus(yeast_fasta, "complete", "saccharomyces_cerevisiae_S288C",
-                 "augustus.gff")
+    run_trimmomatic(arguments.se_reads, arguments.illumina_clip)
