@@ -88,9 +88,14 @@ def run_trimmomatic(fastq_filename, clipper_file, seed_mm=2, palin_th=30,
 #         return call_check #must be 0
 #==============================================================================
 
-def run_hisat2(ref_genome, splicesites, trimmed_input):
+def run_hisat2(index_filename, splicesites, trimmed_input):
     """
+    Returns RNA-seq reads mapped to the reference genome to a file
     
+    Keyword arguments:
+        index_filename: string, a file with the indices for the reference genome
+        splicesites: string, a file of list of know splice sites
+        trimmed_input: Files with the unpaired reads
     """
     hisat_outfile = "%s_mapping.sam"%(ref_genome)
     # checking if file already exists
@@ -98,14 +103,23 @@ def run_hisat2(ref_genome, splicesites, trimmed_input):
         print "The file already exists"
         return hisat_outfile
     else:
-        cmd = "hisat2 -x %s --known-splicesites-infile %s -U %s \
-        --dta-cfufflinks -S %s"%(ref_genome, splicesites, trimmed_input, 
+        cmdSE = "hisat2 -x %s --known-splicesites-infile %s -U %s \
+        --dta-cfufflinks -S %s"%(index_filename, splicesites, trimmed_input, 
                                  hisat_outfile)
                                  
-        output_check = subprocess.check_output(cmd, shell=True)
-        call_check = subprocess.check_call(cmd, shell=True)
+        output_check = subprocess.check_output(cmdSE, shell=True)
+        call_check = subprocess.check_call(cmdSE, shell=True)
         return call_check #must be 0
     
+#==============================================================================
+#         cmdPE = "hisat2 -x %s --known-splicesites-infile %s -U %s \
+#       --dta-cfufflinks -S %s"%(index_filename, splicesites, trimmed_input, 
+#                                 hisat_outfile)
+#                                 
+#        output_check = subprocess.check_output(cmdSE, shell=True)
+#        call_check = subprocess.check_call(cmdSE, shell=True)
+#        return call_check #must be 0
+#==============================================================================
 
 
 if __name__ == "__main__":
