@@ -34,8 +34,8 @@ def get_arguments():
 
 
 def run_trimmomatic(fastq_filename, clipper_file, seed_mm=2, palin_th=30,
-                    simple_th=10, lead_val=3, tail_val=3, win_size=4, 
-                    req_qual=30, single=True):
+                    simple_th=10, lead_val=3, trail_val=3, win_size=4, 
+                    req_qual=30, single=False):
     """ Returns the trimmed reads of single or paired end data to a file
     
     Keyword arguments:
@@ -60,32 +60,33 @@ def run_trimmomatic(fastq_filename, clipper_file, seed_mm=2, palin_th=30,
     """
     # make for loop to go through every dataset
     
-    trimm_outfile = "trimmed_%s.fastq"%(fastq_filename)
+    trimm_outfile = "trimmed_%s"%(fastq_filename)
     # checks whether the file already exists, if not it runs the tool
     if os.path.exists(trimm_outfile):
         print "The file already exists"
         return trimm_outfile
     else:
-        if single == True:
-            cmdSE = "TrimmomaticSE %s %s ILLUMINACLIP:%s:%d:%d:%d LEADING:%d \
-            TRAILING:%d SLIDINGWINDOW:%d:%d" %(fastq_filename, trimm_outfile, 
-                                               clipper_file, seed_mm, palin_th, 
-                                               simple_th, lead_val, tail_val, 
-                                               win_size, req_qual)
-        if single == False:
-            cmdPE = "TrimmomaticPE%s %s ILLUMINACLIP:%s:%d:%d:%d LEADING:%d \
-            TRAILING:%d SLIDINGWINDOW:%d:%d" %(fastq_filename, trimm_outfile, 
-                                               clipper_file, seed_mm, palin_th, 
-                                               simple_th, lead_val, tail_val, 
-                                               win_size, req_qual)
-                               
-    output_check = subprocess.check_output(cmdSE, shell=True)
-    call_check = subprocess.check_call(cmdSE, shell = True)
-    return call_check #must be 0
-      
-    output_check = subprocess.check_output(cmdPE, shell=True)
-    call_check = subprocess.check_call(cmdPE, shell = True)
-    return call_check #must be 0
+   # if single == True:
+        cmdSE = "TrimmomaticSE %s %s ILLUMINACLIP:%s:%d:%d:%d LEADING:%d \
+        TRAILING:%d SLIDINGWINDOW:%d:%d" %(fastq_filename, trimm_outfile, 
+                                           clipper_file, seed_mm, palin_th, 
+                                           simple_th, lead_val, trail_val, 
+                                           win_size, req_qual)
+                                           
+        output_check = subprocess.check_output(cmdSE, shell=True)
+        call_check = subprocess.check_call(cmdSE, shell = True)
+        return call_check #must be 0
+
+ #   if single == False:
+        cmdPE = "TrimmomaticPE %s %s ILLUMINACLIP:%s:%d:%d:%d LEADING:%d \
+        TRAILING:%d SLIDINGWINDOW:%d:%d" %(fastq_filename, trimm_outfile, 
+                                           clipper_file, seed_mm, palin_th, 
+                                           simple_th, lead_val, trail_val, 
+                                           win_size, req_qual)
+                           
+        output_check = subprocess.check_output(cmdPE, shell=True)
+        call_check = subprocess.check_call(cmdPE, shell = True)
+        return call_check #must be 0
 
     
 
@@ -94,12 +95,17 @@ if __name__ == "__main__":
     arguments = get_arguments() 
     print arguments
     
-    if arguments.se_reads==True:
-        run_trimmomatic(arguments.se_reads[0], arguments.illumina_clip,
-                        single=True)
     if arguments.pe_reads==True:
-        run_trimmomatic(arguments.pe_reads, arguments.illumina_clip, 
-                        single=False)
+        for i in range(len(arguments.pe_reads)):
+            run_trimmomatic(arguments.pe_reads[i], arguments.illumina_clip,
+                            single=False)
+                            
+    if arguments.se_reads==True:
+        for i in range(len(arguments.se_reads)):
+            run_trimmomatic(arguments.se_reads[i], arguments.illumina_clip, 
+                            single=True)
+                            
+                    
         
     # run trimmomatic tool from command line
     run_trimmomatic(arguments.se_reads[0], arguments.illumina_clip)
