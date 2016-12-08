@@ -23,7 +23,7 @@ test_data=read.table(
 
 #takes 2000 samples
 subnumber <- parameters[2]
-# removes last column and normalizes the samples on sd=1
+# removes last column and calculates the sd of samples in rows
 sds <- apply(test_data[,-7], 1, sd)
 # orders the samples and returns indices of first the sample with higest sd
 ind <- order(sds,decreasing=TRUE)
@@ -46,7 +46,8 @@ table(tsubdata_tree_cluster_cor)
 
 draw_graph_cluster <- function(clustnumber, colornumber) {
   n=which(tsubdata_tree_cluster_cor==clustnumber)[1]
-  plot(as.matrix(scale(tsubdata, center=TRUE, scale=TRUE))[,n],type="l",col=colornumber)
+  plot(as.matrix(scale(tsubdata, center=TRUE, scale=TRUE))[,n],type="l",col=colornumber, 
+       ylab="gene expression", xlab="samples", main="Clustering gene expression profiles")
   for (j in 2:length(which(tsubdata_tree_cluster_cor==clustnumber))) {
     n=which(tsubdata_tree_cluster_cor==clustnumber)[j]
     points(as.matrix(scale(tsubdata, center=TRUE, scale=TRUE))[,n],type="l",col=colornumber)
