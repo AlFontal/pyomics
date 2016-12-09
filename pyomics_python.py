@@ -21,7 +21,7 @@ def get_arguments():
         no parameters for this function
     """
     parser = argparse.ArgumentParser(description="Pipeline script for DE \
-                                                    analysis")
+    analysis")
     parser.add_argument("-SEr", "--se_reads", nargs="*", help=".fastq file \
     containing single end RNA seq reads", type=str, required=False)
     parser.add_argument("-PEr", "--pe_reads", nargs="*", help=".fastq file \
@@ -29,13 +29,17 @@ def get_arguments():
     parser.add_argument("-clip", "--illumina_clip", help="file containing \
     the sequences that need to be trimmed off the target sequence", 
     type=str, required=False)
+    parser.add_argument("-index", "--index_filename", help="file containing \
+    indices for the reference genome", type=str, required=False)
+    parser.add_argument("-splice", "--splicesites", help="file containing \
+    known splice sites", type=str, required=False)
     arguments = parser.parse_args()
     return arguments
 
 
-def run_trimmomatic(fastq_filename, clipper_file, seed_mm=2, palin_th=30,
-                    simple_th=10, lead_val=3, trail_val=3, win_size=4, 
-                    req_qual=30):
+def run_trimmomatic(fastq_filename, clipper_file, single = True, seed_mm=2, 
+                    palin_th=30, simple_th=10, lead_val=3, trail_val=3, 
+                    win_size=4, req_qual=30):
     """ Returns the trimmed reads of single or paired end data to a file
     
     Keyword arguments:
@@ -58,23 +62,52 @@ def run_trimmomatic(fastq_filename, clipper_file, seed_mm=2, palin_th=30,
     Returns:
         trimm_outfile -- .fastq, name of trimmed RNA-seq reads in .fastq format
     """
-    # make for loop to go through every dataset
+    if single == True:
+        # make for loop to go through every dataset
+        
+        trimm_outfile = "trimmed_%s"%(fastq_filename)
+        # checks whether the file already exists, if not it runs the tool
+        if os.path.exists(trimm_outfile):
+            print "The file already exists"
+            return trimm_outfile
+        else:
+            cmdSE = "TrimmomaticSE %s %s ILLUMINACLIP:%s:%d:%d:%d LEADING:%d \
+TRAILING:%d SLIDINGWINDOW:%d:%d" %(fastq_filename, trimm_outfile, 
+                                   clipper_file, seed_mm, palin_th, 
+                                   simple_th, lead_val, trail_val, 
+                                   win_size, req_qual)
+
+#            output_check = subprocess.check_output(cmdSE, shell=True)
+#            call_check = subprocess.check_call(cmdSE, shell=True)
+#            return call_check #must be 0
+            print cmdSE
+            return [trimm_outfile]
     
-    trimm_outfile = "trimmed_%s"%(fastq_filename)
-    # checks whether the file already exists, if not it runs the tool
-    if os.path.exists(trimm_outfile):
-        print "The file already exists"
-        return trimm_outfile
-    else:
-        cmdSE = "TrimmomaticSE %s %s ILLUMINACLIP:%s:%d:%d:%d LEADING:%d \
-        TRAILING:%d SLIDINGWINDOW:%d:%d" %(fastq_filename, trimm_outfile, 
-                                           clipper_file, seed_mm, palin_th, 
-                                           simple_th, lead_val, trail_val, 
-                                           win_size, req_qual)
-                                           
-        output_check = subprocess.check_output(cmdSE, shell=True)
-        call_check = subprocess.check_call(cmdSE, shell=True)
-        return call_check #must be 0
+    elif single == False:
+        # make for loop to go through every dataset
+        
+        trimm_outfile0 = "trimmed_%s"%(fastq_filename[0])
+        trimm_outfile1 = "trimmed_%s"%(fastq_filename[1])
+        # checks whether the file already exists, if not it runs the tool
+        if os.path.exists(trimm_outfile0) and os.path.exists(trimm_outfile1):
+            print "The files already exists"
+            return [[trimm_outfile0, trimm_outfile1]]
+        else:
+            cmdPE = "TrimmomaticPE %s %s paired_%s unpaired_%s paired_%s unpaired_%s \
+ILLUMINACLIP:%s:%d:%d:%d LEADING:%d \
+TRAILING:%d SLIDINGWINDOW:%d:%d" %(fastq_filename[0], fastq_filename[1], 
+                                   trimm_outfile0, trimm_outfile0, 
+                                   trimm_outfile1, trimm_outfile1, 
+                                   clipper_file, seed_mm, palin_th, 
+                                   simple_th, lead_val, trail_val, 
+                                   win_size, req_qual)
+
+#            output_check = subprocess.check_output(cmdPE, shell=True)
+#            call_check = subprocess.check_call(cmdPE, shell=True)
+#            return call_check #must be 0
+            print cmdPE
+            return [[trimm_outfile0, trimm_outfile1]]
+    
 
 #==============================================================================
 #         cmdPE = "TrimmomaticPE %s %s ILLUMINACLIP:%s:%d:%d:%d LEADING:%d \
@@ -88,7 +121,7 @@ def run_trimmomatic(fastq_filename, clipper_file, seed_mm=2, palin_th=30,
 #         return call_check #must be 0
 #==============================================================================
 
-def run_hisat2(index_filename, splicesites, trimmed_input):
+def run_hisat2(index_filename, splicesites, trimmed_input, single = True):
     """
     Returns RNA-seq reads mapped to the reference genome to a file
     
@@ -96,21 +129,112 @@ def run_hisat2(index_filename, splicesites, trimmed_input):
         index_filename: string, a file with the indices for the reference genome
         splicesites: string, a file of list of know splice sites
         trimmed_input: Files with the unpaired reads
-    """
-    hisat_outfile = "%s_mapping.sam"%(ref_genome)
-    # checking if file already exists
-    if os.path.exists(hisat_outfile):
-        print "The file already exists"
-        return hisat_outfile
-    else:
-        cmdSE = "hisat2 -x %s --known-splicesites-infile %s -U %s \
-        --dta-cfufflinks -S %s"%(index_filename, splicesites, trimmed_input, 
-                                 hisat_outfile)
-                                 
-        output_check = subprocess.check_output(cmdSE, shell=True)
-        call_check = subprocess.check_call(cmdSE, shell=True)
-        return call_check #must be 0
     
+    /local/prog/hisat2/hisay2-align-s
+    --wrapper basic-0
+    --dta
+    -x genome/cro_genome.dna
+    --known-splicesite-infile genome/ssFile.table
+    -S stringtie_sams/bisx.sam / -S stringtie_sams/controlx.sam
+    -U trimmed_samples/t_SSR1820149.fastq / -1 trimmed_samples/SRR1820326/SRR1820326_1_paired.fq -2 trimmed_samples/SRR1820326/SRR1820326_2_paired.fq 
+    
+    """
+    if single == True:
+        print "running singles"
+        single_runcount = 0
+        hisat_outfiles = []
+        for i in range(len(trimmed_input)):
+            single_runcount += 1
+            trimmed_singles = trimmed_input[i]
+            print "run number is %d"%(i)
+            print "single_runcount is %d"%(single_runcount)
+            
+            hisat_outfile = "stringtie_sams/sample%d.sam"%(single_runcount)
+            # checking if file already exists
+            if os.path.exists(hisat_outfile):
+                print "The file already exists"
+                return hisat_outfile
+            else:
+                cmdSE = "/local/prog/hisat2/hisay2-align-s --wrapper basic-0 \
+--dta -x %s --known-splicesite-infile %s -S %s -U %s"%(index_filename, 
+                                                       splicesites, hisat_outfile, 
+                                                       trimmed_singles)
+#                output_check = subprocess.check_output(cmdSE, shell=True)
+#                call_check = subprocess.check_call(cmdSE, shell=True)
+#                return call_check #must be 0
+                print cmdSE
+                hisat_outfiles.append(hisat_outfile)
+        print hisat_outfiles
+        return hisat_outfile
+        
+#        #unpacking the trimmed_input list, separating it by commas
+#        trimmed_singles = ",".join(trimmed_input)
+#        hisat_outfile = "stringtie_sams/bis%d.sam"%(single_runcount)
+#        # checking if file already exists
+#        if os.path.exists(hisat_outfile):
+#            print "The file already exists"
+#            return hisat_outfile
+#        else:
+#            cmdSE = "/local/prog/hisat2/hisay2-align-s --wrapper basic-0 --dta \
+#-x %s --known-splicesite-infile %s -S %s -U %s"%(index_filename, splicesites, 
+#                                                 hisat_outfile, trimmed_singles)
+#            
+#            output_check = subprocess.check_output(cmdSE, shell=True)
+#            call_check = subprocess.check_call(cmdSE, shell=True)
+#            return call_check #must be 0
+#            print cmdSE
+#            return hisat_outfile
+
+
+    elif single == False:
+        print "running pairs"
+        single_runcount = 0
+        hisat_outfiles = []
+        for i in range(len(trimmed_input)):
+            single_runcount += 1
+            trimmed_singles = trimmed_input[i]
+            print "run number is %d"%(i)
+            print "single_runcount is %d"%(single_runcount)
+            
+            hisat_outfile = "stringtie_sams/bis%d.sam"%(single_runcount)
+            # checking if file already exists
+            if os.path.exists(hisat_outfile):
+                print "The file already exists"
+                return hisat_outfile
+            else:
+                cmdSE = "/local/prog/hisat2/hisay2-align-s --wrapper basic-0 \
+--dta -x %s --known-splicesite-infile %s -S %s -U %s"%(index_filename, 
+                                                       splicesites, hisat_outfile, 
+                                                       trimmed_singles)
+#                output_check = subprocess.check_output(cmdSE, shell=True)
+#                call_check = subprocess.check_call(cmdSE, shell=True)
+#                return call_check #must be 0
+                print cmdSE
+                hisat_outfiles.append(hisat_outfile)
+        print hisat_outfiles
+        return hisat_outfile
+        
+        #unpacking the trimmed_input list, into the paired reads
+        trimmed_pairs0 = [item[0] for item in trimmed_input]
+        trimmed_pairs1 = [item[1] for item in trimmed_input]
+        trimmed_pairs0 = ",".join(trimmed_pairs0)
+        trimmed_pairs1 = ",".join(trimmed_pairs1)
+        
+        hisat_outfile = "%s_PEmapping_cuff.sam"%(index_filename)
+        # checking if file already exists
+        if os.path.exists(hisat_outfile):
+            print "The file already exists"
+            return hisat_outfile
+        else:
+            cmdSE = "hisat2 -x %s --known-splicesite-infile %s -1 %s -2 %s \
+--dta -S %s"%(index_filename, splicesites, trimmed_pairs0, 
+                        trimmed_pairs1, hisat_outfile)
+#            output_check = subprocess.check_output(cmdSE, shell=True)
+#            call_check = subprocess.check_call(cmdSE, shell=True)
+#            return call_check #must be 0
+            print cmdSE
+            return hisat_outfile
+            
 #==============================================================================
 #         cmdPE = "hisat2 -x %s --known-splicesites-infile %s -U %s \
 #       --dta-cfufflinks -S %s"%(index_filename, splicesites, trimmed_input, 
@@ -127,12 +251,33 @@ if __name__ == "__main__":
     arguments = get_arguments() 
     print arguments
     
+    trimmed_singles = []
+    trimmed_pairs = []
+    
     # running the trimmomatic tool
     # only runs when se_reads contain something
     if arguments.se_reads:
         for i in range(len(arguments.se_reads)):
-            run_trimmomatic(arguments.se_reads[i], arguments.illumina_clip)
-        
+            #adds the trimmed files to the list of trimmed_singles
+            trimmed_singles += run_trimmomatic(arguments.se_reads[i], 
+                                             arguments.illumina_clip, 
+                                             single=True)
+    
+    if arguments.pe_reads:
+        for i in range(0,len(arguments.pe_reads),2):
+            #adds the trimmed files to the list of trimmed+pairs
+            trimmed_pairs += run_trimmomatic([arguments.pe_reads[i], 
+                                              arguments.pe_reads[i+1]], 
+                                              arguments.illumina_clip, 
+                                              single=False)
+    
+    if len(trimmed_singles) >= 1:
+        run_hisat2(arguments.index_filename, arguments.splicesites, 
+                   trimmed_singles, single = True)
+    if len(trimmed_pairs) >= 1:
+        run_hisat2(arguments.index_filename, arguments.splicesites, 
+                   trimmed_pairs, single = False)
+    
 #==============================================================================
 #         
 #     if arguments.pe_reads==True:
