@@ -1,13 +1,5 @@
 # Installation and loading of the required packages for the analysis
 
-'''
-#Uncomment this in case the local machine doesnt contain the required packages. 
-
-source("https://bioconductor.org/biocLite.R")
-biocLite()
-biocLite(c("ballgown", "genefilter", "dplyr", "devtools"))
-
-'''
 
 library(ballgown)
 library(genefilter)
