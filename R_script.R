@@ -145,10 +145,10 @@ DGlist.norm$samples$norm.factors
 ##Data exploration
 # multidim scaling plot of distances between gene expression profiles
 # distances in the plot approximate the log2 fold changes between the sapmles
-plotMDS(DGlist)
+plotMDS(DGlist.norm)
 
 ##similar plot plot with distances defined in terms of shrunk fold
-logCPM <- predFC(DGlist, prior.count=2*ncol(DGlist))
+logCPM <- predFC(DGlist.norm, prior.count=2*ncol(DGlist))
 plotMDS(logCPM, main="logFC distance")
 
 # comment meh
