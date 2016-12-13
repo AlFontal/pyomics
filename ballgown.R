@@ -18,7 +18,7 @@ pheno_data = read.csv("ballgown/phenodata.csv")
 bg_bis = ballgown(dataDir = "ballgown", samplePattern = "bg_", pData = pheno_data)
 
 # Filter out those genes whose count variance among all samples is less than 1.
-bg_filtered = bg_filtered = subset(bg_obj, "rowVars(texpr(bg_obj)) >1", genomesubset=TRUE)
+bg_filtered = subset(bg_bis, "rowVars(texpr(bg_bis)) >1", genomesubset=TRUE)
 
 # Make a statistical test for all the transcripts to show statistically significant differences between groups
 results_transcripts = stattest(bg_filtered, feature="transcript", covariate = "group", getFC=TRUE, meas= "FPKM")
