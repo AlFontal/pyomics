@@ -1,37 +1,4 @@
-setwd("//SCOMP0856/veen119$/My Documents/Minor 2016/BIF 30806 Advanced Bioinformatics/Project/ballgown")
-bis1 <- read.delim(file = "\\\\SCOMP0856\\veen119$\\My Documents\\Minor 2016\\BIF 30806 Advanced Bioinformatics\\Project\\ballgown\\t_data_bis1.ctab", header = TRUE)
-bis2 <- read.delim(file = "\\\\SCOMP0856\\veen119$\\My Documents\\Minor 2016\\BIF 30806 Advanced Bioinformatics\\Project\\ballgown\\t_data_bis2.ctab", header = TRUE)
-bis3 <- read.delim(file = "\\\\SCOMP0856\\veen119$\\My Documents\\Minor 2016\\BIF 30806 Advanced Bioinformatics\\Project\\ballgown\\t_data_bis3.ctab", header = TRUE)
-cont1 <- read.delim(file = "\\\\SCOMP0856\\veen119$\\My Documents\\Minor 2016\\BIF 30806 Advanced Bioinformatics\\Project\\ballgown\\t_data_control1.ctab", header = TRUE)
-cont2 <- read.delim(file = "\\\\SCOMP0856\\veen119$\\My Documents\\Minor 2016\\BIF 30806 Advanced Bioinformatics\\Project\\ballgown\\t_data_control2.ctab", header = TRUE)
-cont3 <- read.delim(file = "\\\\SCOMP0856\\veen119$\\My Documents\\Minor 2016\\BIF 30806 Advanced Bioinformatics\\Project\\ballgown\\t_data_control3.ctab", header = TRUE)
-
-dim(bis1)
-dim(bis2)
-dim(bis3)
-dim(cont1)
-dim(cont2)
-dim(cont3)
-
-length(which(bis2$gene_id != cont1$gene_id))
-
-total_data = c(59492,6)
-total_data$gene_id <- bis1$gene_id
-total_data$gene_name <- bis1$gene_name
-
-total_data$bis1 <- bis1$FPKM
-total_data$bis2 <- bis2$FPKM
-total_data$bis3 <- bis3$FPKM
-total_data$control1 <- cont1$FPKM
-total_data$control2 <- cont2$FPKM
-total_data$control3 <- cont3$FPKM
-total_data <- as.data.frame(total_data)
-total_data <- total_data[,3:10]
-
-test_data <- total_data[,3:8]
-total_data$gene_id[which(total_data$gene_name != ".")] <- total_data$gene_name
-
-
+#!/usr/bin/env R
 bis1 = read.delim(file = "t_data_bis1.ctab", header = TRUE)
 bis2 = read.delim(file = "t_data_bis2.ctab", header = TRUE)
 bis3 = read.delim(file = "t_data_bis3.ctab", header = TRUE)
