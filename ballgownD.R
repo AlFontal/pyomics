@@ -44,9 +44,9 @@ head(results_genes)
 write.csv(results_transcripts, "ballgown/bis_transcript_results.csv", row.names = FALSE)
 write.csv(results_transcripts, "ballgown/bis_gene_results.csv", row.names = FALSE)
 
-# Identify transcripts and genes with a qvalue < 0.05
-sig_transcripts = subset(results_transcripts, results_transcripts$qval<0.05)
-sig_genes = subset(results_genes, results_genes$qval<0.05)
+# Identify transcripts and genes with a pvalue < 0.05 and a fold change > 2
+sig_transcripts = subset(results_transcripts, results_transcripts$pval<0.05 & results_transcripts$fc>2)
+sig_genes = subset(results_genes, results_genes$pval<0.05 & results_transcripts$fc>2)
 
 sig_transcripts
 sig_genes
