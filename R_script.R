@@ -5,26 +5,22 @@ args=(commandArgs(TRUE))
 if(length(args)==0){
   print("No arguments supplied.")
   ##supply default values
-  infile = "http://www.bioinformatics.nl/courses/BIF-30806/maize_e3.table"
-  g.o.i = "GRMZM2G054123"
+  infile = "gene_expression_table.csv"
+  g.o.i = "CRO_003206"
   method = "complete" # can also change method to average.
-  parameters = c(6,2000)
+  parameters = c(6,1500)
 }else{
   for(i in 1:length(args)){
     eval(parse(text=args[[i]]))
   }
 }
 
-
 test_data=read.table(
   infile, 
-  row.names=1, header=TRUE, sep ="\t")
-
+  row.names=1, header=TRUE, sep =",")
 
 # check dimensions before normalization
 dim(test_data)
-
-
 
 # removes last column and calculates the sd of samples in rows
 sds <- apply(test_data[,-7], 1, sd)
@@ -33,14 +29,12 @@ sds <- apply(test_data[,-7], 1, sd)
 
 # looking at the plot for further normalization
 plot(sds)
-plot(sds[sds<500], main = "plot of stdev below 500", xlab = "samples", ylab = "stdev")
-abline(200, 0, col = 'red', lty = 1)
-minsds <- 200
+plot(sds[sds<50], main = "plot of stdev below 500", xlab = "samples", ylab = "stdev")
+abline(8, 0, col = 'red', lty = 1)
+minsds <- 8
 length(which(sds>minsds))
 subdata <- test_data[which(sds>minsds),]
 dim(subdata)
-
-
 
 ###___normalization method 2, highest 2000 sd's___###
 
@@ -55,15 +49,9 @@ dim(subdata)
 
 # transpose the data and rename columns
 tsubdata <- data.frame(t(subdata[,-7]))
-rownames(tsubdata) = c("first1", "first2", "first3", "second1", "second2", "second3")
-
 
 # Check whether gene(s) of interest is still contained in dataset.
 which(rownames(subdata) == g.o.i)
-
-
-
-
 
 #set the number of clusters we want
 numberclusters <- parameters[1]
@@ -81,7 +69,7 @@ table(tsubdata_tree_cluster_cor)
 draw_graph_cluster <- function(clustnumber, colornumber) {
   n=which(tsubdata_tree_cluster_cor==clustnumber)[1]
   plot(as.matrix(scale(tsubdata, center=TRUE, scale=TRUE))[,n],type="l",col=colornumber, 
-       ylab="gene expression", xlab="samples", main="Clustering gene expression profiles")
+       ylab="gene expression", xlab="samples", main=paste("Cluster ",clustnumber, ", gene expression profile"))
   for (j in 2:length(which(tsubdata_tree_cluster_cor==clustnumber))) {
     n=which(tsubdata_tree_cluster_cor==clustnumber)[j]
     points(as.matrix(scale(tsubdata, center=TRUE, scale=TRUE))[,n],type="l",col=colornumber)
@@ -92,18 +80,18 @@ draw_graph_cluster <- function(clustnumber, colornumber) {
 
 # for every cluster draw the hierarchical correlation graph
 pdf(file="cluster_graphs.pdf")
-par(mfrow = c(2, 3))
+par(mfrow = c(numberclusters/3, 3))
 for (i in 1:numberclusters) {
   draw_graph_cluster(i, i)
 }
 dev.off()
-# Zoom in on the graph with the gene of interest
 par(mfrow=c(1,1))
+# Zoom in on the graph with the gene of interest
 
 target <- tsubdata_tree_cluster_cor[g.o.i]
 names(target)<-'Cluster containing the gene of interest'
 cl.sel <- which(tsubdata_tree_cluster_cor == target)
-cl.sel      # this will show you all the genes in the gene cluster you selected
+#cl.sel      # this will show you all the genes in the gene cluster you selected
 cl.sel.df <- as.data.frame(cl.sel)
 
 # write all the interesting genes, that are contained inside the cluster, to a file
@@ -116,12 +104,15 @@ dev.off()
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Some experimenting with EdgeR
-
+"
 #### Do this only once per PC! it takes some time
 #install the edgeR  library
-source("http://bioconductor.org/biocLite.R")
-biocLite("edgeR")
+"
+#source("http://bioconductor.org/biocLite.R")
+#biocLite("edgeR")
+"
 ##########
+
 #load the library this has to be done each time. 
 library(edgeR)
 
@@ -150,9 +141,8 @@ plotMDS(DGlist.norm)
 
 ##similar plot plot with distances defined in terms of shrunk fold
 logCPM <- predFC(DGlist.norm, prior.count=2*ncol(DGlist))
-plotMDS(logCPM, main="logFC distance")
+"
 
+#plotMDS(logCPM, main="logFC distance")
 # comment meh
-
-
 
