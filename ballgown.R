@@ -53,8 +53,18 @@ sig_transcripts = subset(results_transcripts, results_transcripts$pval<0.05 & ab
 # Keep only those which we have a name for
 de_genes_df = sig_transcripts[sig_transcripts$geneNames != ".", ]
 de_genes_list = de_genes_df[1]
+de_genes_df$geneNames = as.character(de_genes_df$geneNames)
 
-write.csv(de_genes_df, "Ballgown/DE_genes.csv")
+
+annots = read.delim("/home/alejandro/Documents/GitHub/pyomics/cro_functional_annotation.final.txt", header = FALSE)
+colnames(annots) = c("geneNames", "geneFunction")
+annots$geneNames = paste(substr(annots$geneNames, 1, 4), substr(annots$geneNames, 6, 11), sep = "")
+
+de_genes = merge(de_genes_df, annots, by = "geneNames")
+de_genes = data.frame(de_genes$geneNames, de_genes$pval, de_genes$qval, de_genes$logfc, de_genes$geneFunction)
+colnames(de_genes) = c("geneNames", "pval", "qval", "logFC", "geneFunction")
+write.csv(de_genes, "/home/alejandro/Documents/GitHub/pyomics/DE_genes.csv")
+write.csv(de_genes_list, "/home/alejandro/Documents/GitHub/pyomics/DE_geneslist.csv")
 
 tropical = c("darkorange", "dodgerblue", "hotpink", "limegreen", "yellow", "darkred")
 palette(tropical)
