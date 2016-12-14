@@ -46,7 +46,7 @@ def order_genes(genes):
 
    
 def make_new_list(gene_list):    
-    output_file = open('GeneList', 'w')
+    output_file = open('GeneList.txt', 'w')
     
     for gene in gene_list:
         line = '{}\n'.format(gene)
