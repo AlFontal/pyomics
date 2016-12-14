@@ -1,10 +1,10 @@
 #!/usr/bin/env R
-bis1 = read.delim(file = "t_data_bis1.ctab", header = TRUE)
-bis2 = read.delim(file = "t_data_bis2.ctab", header = TRUE)
-bis3 = read.delim(file = "t_data_bis3.ctab", header = TRUE)
-control1 = read.delim(file = "t_data_control1.ctab", header = TRUE)
-control2 = read.delim(file = "t_data_control2.ctab", header = TRUE)
-control3 = read.delim(file = "t_data_control3.ctab", header = TRUE)
+bis1 = read.delim(file = "/ballgown/bg_bis1/t_data.ctab", header = TRUE)
+bis2 = read.delim(file = "/ballgown/bg_bis2/t_data.ctab", header = TRUE)
+bis3 = read.delim(file = "/ballgown/bg_bis3/t_data.ctab", header = TRUE)
+control1 = read.delim(file = "/ballgown/bg_control1/t_data.ctab", header = TRUE)
+control2 = read.delim(file = "/ballgown/bg_control2/t_data.ctab", header = TRUE)
+control3 = read.delim(file = "/ballgown/bg_control3/t_data.ctab", header = TRUE)
 
 genenames = bis1$gene_name[bis1$gene_name != "."]
 bis1FPKM = bis1$FPKM[bis1$gene_name != "."]
