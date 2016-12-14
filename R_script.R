@@ -49,7 +49,7 @@ ind <- order(sds,decreasing=TRUE)
 #takes 2000 samples
 subnumber <- parameters[2]
 #takes only first 2000 with highest sd, will differ most in gene expression
-subdata <- test_data[ind[1:200],]
+subdata <- test_data[ind[1:subnumber],]
 # check dimensions after normalization
 dim(subdata)
 
@@ -91,11 +91,12 @@ draw_graph_cluster <- function(clustnumber, colornumber) {
 # still need to write the plots to a file
 
 # for every cluster draw the hierarchical correlation graph
+pdf(file="cluster_graphs.pdf")
 par(mfrow = c(2, 3))
 for (i in 1:numberclusters) {
   draw_graph_cluster(i, i)
 }
-
+dev.off()
 # Zoom in on the graph with the gene of interest
 par(mfrow=c(1,1))
 
@@ -109,9 +110,9 @@ cl.sel.df <- as.data.frame(cl.sel)
 write.table(cl.sel.df, file="Interesting_genes.csv", sep=",", row.names=TRUE)
 
 target      # this will show you which cluster you have extracted
-
+pdf(file="interesting_genes_graph.pdf")
 draw_graph_cluster(target,target)
-
+dev.off()
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Some experimenting with EdgeR

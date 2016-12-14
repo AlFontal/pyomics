@@ -211,7 +211,38 @@ def run_hisat2(index_filename, splicesites, trimmed_input, single = True):
 #        return call_check #must be 0
 #==============================================================================
 
+def run_samtools(directory = "stringtie_sams/"):
+    cmd = "for sam in %s*.sam ; do samtools view -bS %s$sam | samtools sort \
+%s-$sam.bam ; done"%(directory, directory, directory)
+    print cmd
+#    output_check = subprocess.check_output(cmdSE, shell=True)
+#    call_check = subprocess.check_call(cmdSE, shell=True)
+#    return call_check #must be 0
 
+def run_stringtie(directory = "stringtie_sams/"):
+    cmd = "for bam in %s*.bam ; do stringtie %s$bam -G genome/annots_with_introns.gff3 \
+-o %s$bam.out ; done"%(directory, directory, directory)
+    print cmd
+#    output_check = subprocess.check_output(cmdSE, shell=True)
+#    call_check = subprocess.check_call(cmdSE, shell=True)
+#    return call_check #must be 0
+    
+def run_merge_stringtie(directory = "stringtie_sams/"):
+    cmd = "stringtie --merge -G genome/annots_with_introns.gff3 %sgtflist.txt"\
+%(directory)
+    print cmd
+#    output_check = subprocess.check_output(cmdSE, shell=True)
+#    call_check = subprocess.check_call(cmdSE, shell=True)
+#    return call_check #must be 0
+    
+def run_ballgown(directory = "stringtie_sams/"):
+    cmd = "for bam in %s*.bam ; do stringtie -e -B -G %smerged.gtf \
+-o ballgown/$bg_{bam%%.*}/bg_${bam%%.*}.gtf %s$bam ; done"%(directory, directory, directory)
+    print cmd
+#    output_check = subprocess.check_output(cmdSE, shell=True)
+#    call_check = subprocess.check_call(cmdSE, shell=True)
+#    return call_check #must be 0
+    
 if __name__ == "__main__":
     #Get input file names from command line
     arguments = get_arguments() 
@@ -265,6 +296,11 @@ if __name__ == "__main__":
         paired_sams = run_hisat2(arguments.index_filename, arguments.splicesites, 
                    trimmed_pairs, single = False)
         print paired_sams
+    
+    run_samtools()
+    run_stringtie()
+    run_merge_stringtie()
+    run_ballgown()
     
 #==============================================================================
 #         
