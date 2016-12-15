@@ -1,0 +1,72 @@
+CRO_T000088	gnl|CATHA|GK13-53569-MONOMER Pectinesterase, Pectinesterase (complement(13785510..13783687)) 
+CRO_T000634	gnl|CATHA|GK13-46650-MONOMER tonoplast intrinsic protein, tonoplast 
+CRO_T000842	gnl|CATHA|GK13-27768-MONOMER protein TRANSPARENT TESTA 12-like 
+CRO_T001067	gnl|CATHA|GK13-53844-MONOMER conserved hypothetical protein 14270749..14271117 
+CRO_T001436	gnl|CATHA|GK13-50779-MONOMER unnamed product (complement(8616180..8614936)) 
+CRO_T002907	gnl|CATHA|GK13-35509-MONOMER myo-inositol-1-phosphate synthase 
+CRO_T003206	gnl|CATHA|GK13-49622-MONOMER unnamed product (complement(6501201..6500119)) 
+CRO_T004659	gnl|CATHA|GK13-54351-MONOMER No hits found (complement(15140743..15139322)) 
+CRO_T004906	gnl|CATHA|GK13-36864-MONOMER chlorophyll a-b binding protein 
+CRO_T005949	gnl|CATHA|GK13-34864-MONOMER secologanin synthase-like 848981..850546 
+CRO_T006181	gnl|CATHA|GK13-43766-MONOMER No hits found (complement(16021405..16020791)) 
+CRO_T006566	gnl|CATHA|GK13-35815-MONOMER elongation factor G, chloroplastic-like, 
+CRO_T006776	gnl|CATHA|GK13-36374-MONOMER presequence protease 1, chloroplastic/mitochondrial-like 
+CRO_T007201	gnl|CATHA|GK13-26771-MONOMER conserved hypothetical protein 3610342..3610977 
+CRO_T007371	gnl|CATHA|GK13-9283-MONOMER conserved hypothetical protein 3861209..3861841 
+CRO_T007453	gnl|CATHA|GK13-9884-MONOMER unnamed product 4753810..4754229 
+CRO_T008172	gnl|CATHA|GK13-36416-MONOMER Plastocyanin, Plastocyanin 3622456..3622968 
+CRO_T008728	gnl|CATHA|GK13-53771-MONOMER light-harvesting complex II protein 
+CRO_T008821	gnl|CATHA|GK13-38428-MONOMER phospholipase C 7140581..7142206 
+CRO_T010331	gnl|CATHA|GK13-10993-MONOMER phosphoribulokinase, phosphoribulokinase 
+CRO_T010600	gnl|CATHA|GK13-30726-MONOMER protein TRANSPARENT TESTA 12-like, 
+CRO_T011303	gnl|CATHA|GK13-51029-MONOMER chlorophyll a/b binding protein, 
+CRO_T011698	gnl|CATHA|GK13-43773-MONOMER glucosyltransferase, indole-3-acetate 
+CRO_T011830	gnl|CATHA|GK13-21094-MONOMER unnamed product 5865460..5867706 
+CRO_T011861	gnl|CATHA|GK13-8496-MONOMER CDGSH iron-sulfur domain-containing 
+CRO_T012777	gnl|CATHA|GK13-34859-MONOMER probable salt tolerance-like protein 
+CRO_T013155	gnl|CATHA|GK13-11599-MONOMER chloroplast sedoheptulose-1,7-bisphosphatase, 
+CRO_T013259	gnl|CATHA|GK13-26766-MONOMER unnamed product (complement(3598687..3598367)) 
+CRO_T013452	gnl|CATHA|GK13-46862-MONOMER RecName: Full=Glycine-rich cell 
+CRO_T013686	gnl|CATHA|GK13-51199-MONOMER hypothetical protein VITISV_010740 
+CRO_T014404	gnl|CATHA|GK13-82-MONOMER zinc finger (B-box type) family protein 
+CRO_T014616	gnl|CATHA|GK13-34864-MONOMER secologanin synthase-like 848981..850546 
+CRO_T014803	gnl|CATHA|GK13-35300-MONOMER No hits found (complement(1640980..1640462)) 
+CRO_T014907	gnl|CATHA|GK13-9650-MONOMER unnamed product 4408685..4409476 
+CRO_T014980	gnl|CATHA|GK13-51145-MONOMER Tetrapyrrole-binding protein, chloroplast 
+CRO_T015239	gnl|CATHA|GK13-14921-MONOMER ATP-binding cassette transporter 
+CRO_T015886	gnl|CATHA|GK13-45175-MONOMER unknown 18504601..18505095 Catharanthus 
+CRO_T016488	gnl|CATHA|GK13-47609-MONOMER chalcone isomerase, chalcone isomerase 
+CRO_T016708	gnl|CATHA|GK13-15923-MONOMER dof zinc finger protein DOF3.3-like, 
+CRO_T017049	gnl|CATHA|GK13-25010-MONOMER unnamed product (complement(487298..486696)) 
+CRO_T017423	gnl|CATHA|GK13-46246-MONOMER putative DNA-binding protein ESCAROLA-like 
+CRO_T017488	gnl|CATHA|GK13-40401-MONOMER methyltransferase, putative, methyltransferase 
+CRO_T017948	gnl|CATHA|GK13-48901-MONOMER Glutaredoxin family protein 5186259..5187347 
+CRO_T018926	gnl|CATHA|GK13-30726-MONOMER protein TRANSPARENT TESTA 12-like, 
+CRO_T019508	gnl|CATHA|GK13-42464-MONOMER predicted protein 13707898..13708647 
+CRO_T019910	gnl|CATHA|GK13-20770-MONOMER unnamed product 5291265..5291627 
+CRO_T020882	gnl|CATHA|GK13-49136-MONOMER \aminotransferase 2 (complement(join(5622077..5621221,5621086..5620774))) 
+CRO_T021501	gnl|CATHA|GK13-46524-MONOMER unnamed product 775928..776878 Catharanthus 
+CRO_T021502	gnl|CATHA|GK13-29424-MONOMER strictosidine synthase family protein, 
+CRO_T023569	gnl|CATHA|GK13-39025-MONOMER Ribulose bisphosphate carboxylase/oxygenase 
+CRO_T023903	gnl|CATHA|GK13-51029-MONOMER chlorophyll a/b binding protein, 
+CRO_T023927	gnl|CATHA|GK13-51561-MONOMER unnamed product (complement(10037130..10036396)) 
+CRO_T024360	gnl|CATHA|GK13-2889-MONOMER COL domain class transcription factor, 
+CRO_T025029	gnl|CATHA|GK13-49995-MONOMER chlorophyll a-b binding protein 
+CRO_T026337	gnl|CATHA|GK13-51590-MONOMER PGR5, proton gradient regulation 
+CRO_T027396	gnl|CATHA|GK13-33857-MONOMER photosystem I reaction center subunit 
+CRO_T027814	gnl|CATHA|GK13-5343-MONOMER circadian clock associated1 (complement(9376907..9374595)) 
+CRO_T028400	gnl|CATHA|GK13-48195-MONOMER probable protein phosphatase 2C 
+CRO_T028666	gnl|CATHA|GK13-7082-MONOMER unnamed product (complement(862876..861941)) 
+CRO_T029297	gnl|CATHA|GK13-16333-MONOMER UDP-glucose flavonoid 3-O-glucosyltransferase 
+CRO_T030110	gnl|CATHA|GK13-50287-MONOMER nodulin-related protein 1, expressed 
+CRO_T030619	gnl|CATHA|GK13-40457-MONOMER PSI reaction center subunit II, 
+CRO_T030645	gnl|CATHA|GK13-52880-MONOMER probable isoaspartyl peptidase/L-asparaginase 
+CRO_T030732	gnl|CATHA|GK13-48009-MONOMER oxidoreductase, Putative oxidoreductase 
+CRO_T031823	gnl|CATHA|GK13-10814-MONOMER unnamed product (complement(join(6037336..6037079,6036815..6036138))) 
+CRO_T032137	gnl|CATHA|GK13-46783-MONOMER small heat-shock protein 1293662..1294309 
+CRO_T032641	gnl|CATHA|GK13-20625-MONOMER photosystem II reaction center W 
+CRO_T032858	gnl|CATHA|GK13-54311-MONOMER unnamed product (complement(15085002..15084532)) 
+CRO_T032950	gnl|CATHA|GK13-54133-MONOMER No hits found 14754683..14755003 
+CRO_T032979	gnl|CATHA|GK13-8905-MONOMER putative aquaporin (complement(3322781..3321870)) 
+CRO_T033394	gnl|CATHA|GK13-34768-MONOMER photosystem I reaction center subunit 
+CRO_T033829	gnl|CATHA|GK13-41947-MONOMER progesterone 5-beta-reductase (complement(12917245..12916007)) 
