@@ -246,7 +246,7 @@ def run_ballgown(directory = "stringtie_sams/"):
 if __name__ == "__main__":
     #Get input file names from command line
     arguments = get_arguments() 
-    print arguments
+#    print arguments
 
     # running the trimmomatic tool
     # only runs when se_reads contain something
@@ -259,7 +259,7 @@ if __name__ == "__main__":
                                                arguments.trim_folder,
                                                arguments.illumina_clip,
                                                single=True)
-        print trimmed_singles
+#        print trimmed_singles
     
     if arguments.pe_reads:
         trimmed_pairs = []
@@ -271,7 +271,7 @@ if __name__ == "__main__":
                                               arguments.trim_folder,
                                               arguments.illumina_clip, 
                                               single=False)
-        print trimmed_pairs
+#        print trimmed_pairs
     
     try:
         trimmed_singles
@@ -283,7 +283,7 @@ if __name__ == "__main__":
         single_sams = []
         single_sams = run_hisat2(arguments.index_filename, arguments.splicesites, 
                    trimmed_singles, single = True)
-        print single_sams
+#        print single_sams
     
     try:
         trimmed_pairs
@@ -295,7 +295,7 @@ if __name__ == "__main__":
         paired_sams = []
         paired_sams = run_hisat2(arguments.index_filename, arguments.splicesites, 
                    trimmed_pairs, single = False)
-        print paired_sams
+#        print paired_sams
     
     run_samtools()
     run_stringtie()
