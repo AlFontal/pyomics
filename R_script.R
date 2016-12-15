@@ -1,5 +1,5 @@
 #!/usr/bin/env R
-#setwd("//scomp0854/bosch098$/My Documents/Adv. Bioinformatics/project")
+#setwd("//SCOMP0856/veen119$/My Documents/Minor 2016/BIF 30806 Advanced Bioinformatics/Project/ballgown")
 args=(commandArgs(TRUE))
 
 if(length(args)==0){
@@ -15,6 +15,30 @@ if(length(args)==0){
   }
 }
 
+bis1 = read.delim(file = "/ballgown/bg_bis1/t_data.ctab", header = TRUE)
+bis2 = read.delim(file = "/ballgown/bg_bis2/t_data.ctab", header = TRUE)
+bis3 = read.delim(file = "/ballgown/bg_bis3/t_data.ctab", header = TRUE)
+control1 = read.delim(file = "/ballgown/bg_control1/t_data.ctab", header = TRUE)
+control2 = read.delim(file = "/ballgown/bg_control2/t_data.ctab", header = TRUE)
+control3 = read.delim(file = "/ballgown/bg_control3/t_data.ctab", header = TRUE)
+
+genenames = bis1$gene_name[bis1$gene_name != "."]
+bis1FPKM = bis1$FPKM[bis1$gene_name != "."]
+bis2FPKM = bis2$FPKM[bis2$gene_name != "."]
+bis3FPKM = bis3$FPKM[bis3$gene_name != "."]
+control1FPKM = control1$FPKM[control1$gene_name != "."]
+control2FPKM = control2$FPKM[control2$gene_name != "."]
+control3FPKM = control3$FPKM[control3$gene_name != "."]
+
+exp_data = data.frame(bis1FPKM, bis2FPKM, bis3FPKM, control1FPKM, control2FPKM, control3FPKM, row.names = genenames)
+sds = apply(exp_data, 1, sd)
+idxs = which(sds == 0)
+exp_data = exp_data[-idxs, ]
+dim(exp_data)
+head(exp_data)
+
+write.table(exp_data, file=infile, sep=",", row.names=TRUE)
+
 test_data=read.table(
   infile, 
   row.names=1, header=TRUE, sep =",")
@@ -28,13 +52,13 @@ sds <- apply(test_data[,-7], 1, sd)
 ###___normalization method 1, cutt-off sd___###
 
 # looking at the plot for further normalization
-plot(sds)
-plot(sds[sds<50], main = "plot of stdev below 500", xlab = "samples", ylab = "stdev")
-abline(8, 0, col = 'red', lty = 1)
-minsds <- 8
-length(which(sds>minsds))
-subdata <- test_data[which(sds>minsds),]
-dim(subdata)
+#plot(sds)
+#plot(sds[sds<50], main = "plot of stdev below 500", xlab = "samples", ylab = "stdev")
+#abline(8, 0, col = 'red', lty = 1)
+#minsds <- 8
+#length(which(sds>minsds))
+#subdata <- test_data[which(sds>minsds),]
+#dim(subdata)
 
 ###___normalization method 2, highest 2000 sd's___###
 
@@ -79,13 +103,13 @@ draw_graph_cluster <- function(clustnumber, colornumber) {
 # still need to write the plots to a file
 
 # for every cluster draw the hierarchical correlation graph
-pdf(file="cluster_graphs.pdf")
-par(mfrow = c(numberclusters/3, 3))
-for (i in 1:numberclusters) {
-  draw_graph_cluster(i, i)
-}
-dev.off()
-par(mfrow=c(1,1))
+#pdf(file="cluster_graphs.pdf")
+#par(mfrow = c(numberclusters/3, 3))
+#for (i in 1:numberclusters) {
+#  draw_graph_cluster(i, i)
+#}
+#dev.off()
+#par(mfrow=c(1,1))
 # Zoom in on the graph with the gene of interest
 
 target <- tsubdata_tree_cluster_cor[g.o.i]
@@ -98,9 +122,9 @@ cl.sel.df <- as.data.frame(cl.sel)
 write.table(cl.sel.df, file="Interesting_genes.csv", sep=",", row.names=TRUE)
 
 target      # this will show you which cluster you have extracted
-pdf(file="interesting_genes_graph.pdf")
-draw_graph_cluster(target,target)
-dev.off()
+#pdf(file="interesting_genes_graph.pdf")
+#draw_graph_cluster(target,target)
+#dev.off()
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Some experimenting with EdgeR
