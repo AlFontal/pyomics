@@ -168,5 +168,5 @@ logCPM <- predFC(DGlist.norm, prior.count=2*ncol(DGlist))
 "
 
 #plotMDS(logCPM, main="logFC distance")
-# comment meh
+
 
