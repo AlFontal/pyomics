@@ -81,8 +81,8 @@ TRAILING:%d SLIDINGWINDOW:%d:%d" %(raw_folder, fastq_filename, trimm_outfile,
                                    simple_th, lead_val, trail_val, 
                                    win_size, req_qual)
 
-#            output_check = subprocess.check_output(cmdSE, shell=True)
-#            call_check = subprocess.check_call(cmdSE, shell=True)
+            output_check = subprocess.check_output(cmdSE, shell=True)
+            call_check = subprocess.check_call(cmdSE, shell=True)
 #            return call_check #must be 0
             print cmdSE
             return [trimm_outfile]
@@ -111,8 +111,8 @@ TRAILING:%d SLIDINGWINDOW:%d:%d" %(raw_folder, fastq_filename[0],
                                    simple_th, lead_val, trail_val, 
                                    win_size, req_qual)
 
-#            output_check = subprocess.check_output(cmdPE, shell=True)
-#            call_check = subprocess.check_call(cmdPE, shell=True)
+            output_check = subprocess.check_output(cmdPE, shell=True)
+            call_check = subprocess.check_call(cmdPE, shell=True)
 #            return call_check #must be 0
             print cmdPE
             return [["%spaired_%s"%(trim_folder, trimm_outfile0), \
@@ -169,8 +169,8 @@ def run_hisat2(index_filename, splicesites, trimmed_input, single = True):
                                                        trimmed_singles)
                 print cmdSE
                 hisat_outfiles.append(hisat_outfile)
-#                output_check = subprocess.check_output(cmdSE, shell=True)
-#                call_check = subprocess.check_call(cmdSE, shell=True)
+                output_check = subprocess.check_output(cmdSE, shell=True)
+                call_check = subprocess.check_call(cmdSE, shell=True)
 #                return call_check #must be 0
         return hisat_outfiles
         
@@ -196,8 +196,8 @@ def run_hisat2(index_filename, splicesites, trimmed_input, single = True):
                                                              trimmed_pairs[1])
                 print cmdSE
                 hisat_outfiles.append(hisat_outfile)
-#                output_check = subprocess.check_output(cmdSE, shell=True)
-#                call_check = subprocess.check_call(cmdSE, shell=True)
+                output_check = subprocess.check_output(cmdSE, shell=True)
+                call_check = subprocess.check_call(cmdSE, shell=True)
 #                return call_check #must be 0
         return hisat_outfiles
                     
