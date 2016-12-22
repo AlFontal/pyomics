@@ -70,7 +70,7 @@ sds <- apply(test_data[,-7], 1, sd)
 #subdata <- test_data[which(sds>minsds),]
 #dim(subdata)
 
-###___Method 2, highest 2000 sd's___###
+###___Method 2, highest 1500 sd's___###
 
 # orders the samples and returns indices of first the sample with higest sd
 ind <- order(sds,decreasing=TRUE)
