@@ -39,7 +39,7 @@ control3FPKM = control3$FPKM[control3$gene_name != "."]
  # Create a dataframe with the expression lvl in the cells with samples as columns and genes as rows. 
 exp_data = data.frame(bis1FPKM, bis2FPKM, bis3FPKM, control1FPKM, control2FPKM, control3FPKM, row.names = genenames)
 
- +# Calculate standard deviation between samples for each gene. And filter out those which have a sd == 0. 
+ # Calculate standard deviation between samples for each gene. And filter out those which have a sd == 0. 
 sds = apply(exp_data, 1, sd)
 idxs = which(sds == 0)
 exp_data = exp_data[-idxs, ]
