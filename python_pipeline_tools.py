@@ -212,36 +212,36 @@ def run_hisat2(index_filename, splicesites, trimmed_input, single = True):
 #==============================================================================
 
 def run_samtools(directory = "stringtie_sams/"):
-    cmd = "for sam in %s*.sam ; do samtools view -bS %s$sam | samtools sort \
-%s-$sam.bam ; done"%(directory, directory, directory)
+    cmd = "for sam in %s*.sam ; do samtools view -bS $sam | samtools sort \
+- $sam.bam ; done"%(directory)
     print cmd
-#    output_check = subprocess.check_output(cmdSE, shell=True)
-#    call_check = subprocess.check_call(cmdSE, shell=True)
-#    return call_check #must be 0
+    output_check = subprocess.check_output(cmd, shell=True)
+    call_check = subprocess.check_call(cmd, shell=True)
+    return call_check #must be 0
 
 def run_stringtie(directory = "stringtie_sams/"):
-    cmd = "for bam in %s*.bam ; do stringtie %s$bam -G genome/annots_with_introns.gff3 \
--o %s$bam.out ; done"%(directory, directory, directory)
+    cmd = "for bam in %s*.bam ; do /local/prog/stringtie/stringtie $bam -G genome/annots_with_introns.gff3 \
+-o $bam.gtf ; done"%(directory)
     print cmd
-#    output_check = subprocess.check_output(cmdSE, shell=True)
-#    call_check = subprocess.check_call(cmdSE, shell=True)
-#    return call_check #must be 0
+    output_check = subprocess.check_output(cmd, shell=True)
+    call_check = subprocess.check_call(cmd, shell=True)
+    return call_check #must be 0
     
 def run_merge_stringtie(directory = "stringtie_sams/"):
-    cmd = "stringtie --merge -G genome/annots_with_introns.gff3 %sgtflist.txt"\
+    cmd = "/local/prog/stringtie/stringtie --merge -G genome/annots_with_introns.gff3 -o merged.gtf %s*.gtf"\
 %(directory)
     print cmd
-#    output_check = subprocess.check_output(cmdSE, shell=True)
-#    call_check = subprocess.check_call(cmdSE, shell=True)
-#    return call_check #must be 0
+    output_check = subprocess.check_output(cmd, shell=True)
+    call_check = subprocess.check_call(cmd, shell=True)
+    return call_check #must be 0
     
 def run_ballgown(directory = "stringtie_sams/"):
-    cmd = "for bam in %s*.bam ; do stringtie -e -B -G %smerged.gtf \
--o ballgown/$bg_{bam%%.*}/bg_${bam%%.*}.gtf %s$bam ; done"%(directory, directory, directory)
+    cmd = "for bam in %s*.bam ; do /local/prog/stringtie/stringtie -e -B -G merged.gtf \
+-o ballgown/bg_${bam%%.*}/bg_${bam%%.*}.gtf $bam ; done"%(directory)
     print cmd
-#    output_check = subprocess.check_output(cmdSE, shell=True)
-#    call_check = subprocess.check_call(cmdSE, shell=True)
-#    return call_check #must be 0
+    output_check = subprocess.check_output(cmd, shell=True)
+    call_check = subprocess.check_call(cmd, shell=True)
+    return call_check #must be 0
     
 if __name__ == "__main__":
     #Get input file names from command line
