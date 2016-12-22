@@ -2,9 +2,10 @@
 #setwd("//SCOMP0856/veen119$/My Documents/Minor 2016/BIF 30806 Advanced Bioinformatics/Project/ballgown")
 args=(commandArgs(TRUE))
 
+# checking if input on command line
 if(length(args)==0){
   print("No arguments supplied.")
-  ##supply default values
+  ##supply default parameters
   infile = "gene_expression_table.csv"
   g.o.i = "CRO_003206"
   method = "complete" # can also change method to average.
@@ -15,6 +16,8 @@ if(length(args)==0){
   }
 }
 
+
+# Read all the output files from stringtie
 bis1 = read.delim(file = "./ballgown/bg_bis1/t_data.ctab", header = TRUE)
 bis2 = read.delim(file = "./ballgown/bg_bis2/t_data.ctab", header = TRUE)
 bis3 = read.delim(file = "./ballgown/bg_bis3/t_data.ctab", header = TRUE)
@@ -22,7 +25,10 @@ control1 = read.delim(file = "./ballgown/bg_control1/t_data.ctab", header = TRUE
 control2 = read.delim(file = "./ballgown/bg_control2/t_data.ctab", header = TRUE)
 control3 = read.delim(file = "./ballgown/bg_control3/t_data.ctab", header = TRUE)
 
+ # Store as genenames all the gene_name column that contains an actual gene name 
 genenames = bis1$gene_name[bis1$gene_name != "."]
+
+# Store as expression values 
 bis1FPKM = bis1$FPKM[bis1$gene_name != "."]
 bis2FPKM = bis2$FPKM[bis2$gene_name != "."]
 bis3FPKM = bis3$FPKM[bis3$gene_name != "."]
@@ -30,13 +36,17 @@ control1FPKM = control1$FPKM[control1$gene_name != "."]
 control2FPKM = control2$FPKM[control2$gene_name != "."]
 control3FPKM = control3$FPKM[control3$gene_name != "."]
 
+ # Create a dataframe with the expression lvl in the cells with samples as columns and genes as rows. 
 exp_data = data.frame(bis1FPKM, bis2FPKM, bis3FPKM, control1FPKM, control2FPKM, control3FPKM, row.names = genenames)
+
+ +# Calculate standard deviation between samples for each gene. And filter out those which have a sd == 0. 
 sds = apply(exp_data, 1, sd)
 idxs = which(sds == 0)
 exp_data = exp_data[-idxs, ]
 dim(exp_data)
 head(exp_data)
 
+# write the data to a file and open again as test_data
 write.table(exp_data, file=infile, sep=",", row.names=TRUE)
 
 test_data=read.table(
