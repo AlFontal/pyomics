@@ -53,15 +53,15 @@ test_data=read.table(
   infile, 
   row.names=1, header=TRUE, sep =",")
 
-# check dimensions before normalization
+# check dimensions before shrinking the data
 dim(test_data)
 
 # removes last column and calculates the sd of samples in rows
 sds <- apply(test_data[,-7], 1, sd)
 
-###___normalization method 1, cutt-off sd___###
+###___Method 1, cutt-off sd___###
 
-# looking at the plot for further normalization
+# looking at the plot for setting a cut-off
 #plot(sds)
 #plot(sds[sds<50], main = "plot of stdev below 500", xlab = "samples", ylab = "stdev")
 #abline(8, 0, col = 'red', lty = 1)
@@ -70,7 +70,7 @@ sds <- apply(test_data[,-7], 1, sd)
 #subdata <- test_data[which(sds>minsds),]
 #dim(subdata)
 
-###___normalization method 2, highest 2000 sd's___###
+###___Method 2, highest 2000 sd's___###
 
 # orders the samples and returns indices of first the sample with higest sd
 ind <- order(sds,decreasing=TRUE)
@@ -78,7 +78,7 @@ ind <- order(sds,decreasing=TRUE)
 subnumber <- parameters[2]
 #takes only first 2000 with highest sd, will differ most in gene expression
 subdata <- test_data[ind[1:subnumber],]
-# check dimensions after normalization
+# check dimensions reducing dataset
 dim(subdata)
 
 # transpose the data and rename columns
