@@ -31,3 +31,12 @@ overlapping_genes_with_annotation.txt
 After these overlapping genes were obtained we build or own BLAST database by using the protein sequences in:
 protseq.fsa
 
+Then writes a fasta file containing only the prot sequences of the genes in the list. 
+GetGenes.py
+
+
+In our case it served to translate the CRO_TXXXXX names to the actual gene names. 
+
+To parse the top hits of the BLASTp: parseBlast.py
+
+
